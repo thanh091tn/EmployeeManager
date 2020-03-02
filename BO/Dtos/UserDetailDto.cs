@@ -9,6 +9,7 @@ namespace BO.Dtos
         public string Name { get; set; }
         public Guid Id { get; set; }
         public string RoleName { get; set; }
+        public string Password { get; set; }
         public int RoleId { get; set; }
     }
 }

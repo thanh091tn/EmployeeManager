@@ -147,6 +147,7 @@ namespace API
 
             //DI for Logic
             services.AddScoped<IUserLogic, UserLogic>();
+            services.AddScoped<ITaskLogic, TaskLogic>();
             
 
 

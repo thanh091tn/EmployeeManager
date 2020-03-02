@@ -15,6 +15,7 @@ namespace BO.Models
 
         public string Password { get; set; }
         public int RoleId { get; set; }
+        public Guid? ManagedBy { get; set; }
         public string Name { get; set; }
         [ForeignKey("RoleId")]
         public RoleEntity RoleEntity { get; set; }

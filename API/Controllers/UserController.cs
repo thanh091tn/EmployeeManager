@@ -23,6 +23,32 @@ namespace API.Controllers
             _userLogic = userLogic;
         }
 
+        [HttpGet]
+        public IActionResult GetListUser()
+        {
+            var rs = _userLogic.GetListUserDetail();
+
+            if (rs !=null)
+            {
+                return Ok(rs);
+            }
+
+            return NotFound();
+        }
+        [HttpGet("{userId}")]
+        public IActionResult GetUser(Guid userId)
+        {
+            var rs = _userLogic.GetUserDetailById(userId);
+
+            if (rs != null)
+            {
+                return Ok(rs);
+            }
+
+            return NotFound();
+        }
+
+
         [HttpPost("Login")]
         public IActionResult GetUser([FromBody]LoginRequest request)
         {
@@ -39,6 +65,45 @@ namespace API.Controllers
             }
 
             return Ok(user);
+        }
+
+        [HttpPut]
+        public IActionResult CreateUser([FromBody]CreateNewUserRequest request)
+        {
+
+            var rs = _userLogic.CreateUser(request);
+
+            if (rs)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult UpdateUser([FromBody] UpdateUserRequest request)
+        {
+            var rs = _userLogic.UpdateUser(request);
+
+            if (rs)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+        [HttpDelete("{userId}")]
+        public IActionResult UpdateUser(Guid userId)
+        {
+            var rs = _userLogic.DeleteUserById(userId);
+
+            if (rs)
+            {
+                return Ok();
+            }
+
+            return NotFound();
         }
     }
 }

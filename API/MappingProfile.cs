@@ -19,6 +19,12 @@ namespace API
             CreateMap<CreateTaskRequest, TaskEntity>();
             CreateMap<TaskEntity, TaskDetailDto>();
             CreateMap<TaskDetailDto, TaskEntity>();
+            CreateMap<TaskEntity, UpdateTaskRequest>();
+            CreateMap<UpdateTaskRequest, TaskEntity>();
+            CreateMap<UserEntity, CreateNewUserRequest>();
+            CreateMap<CreateNewUserRequest, UserEntity>();
+            CreateMap<UserEntity, UserDetailDto>();
+            CreateMap<UserDetailDto, UserEntity>();
 
         }
     }

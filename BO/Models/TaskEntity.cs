@@ -19,6 +19,8 @@ namespace BO.Models
         public Guid AssignedTo { get; set; }
         public Guid? Updateby { get; set; }
         public DateTime? UpdateTime { get; set; }
+        public bool IsApproved { get; set; }
+        public bool IsAccepted { get; set; }
         public string Reason { get; set; }
         [ForeignKey("AssignedTo")]
         public UserEntity User { get; set; }

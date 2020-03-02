@@ -6,6 +6,8 @@ namespace BO.Request
 {
     public class UpdateTaskRequest
     {
+        public bool IsApproved { get; set; }
+        public bool IsAccepted { get; set; }
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -19,5 +21,6 @@ namespace BO.Request
         public Guid? Updateby { get; set; }
         public DateTime? UpdateTime { get; set; }
         public string Reason { get; set; }
+        
     }
 }

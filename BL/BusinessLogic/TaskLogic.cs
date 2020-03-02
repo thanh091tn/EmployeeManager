@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ using BO.Dtos;
 using BO.Models;
 using BO.Request;
 using DAL.Repository.UnitOfWorks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace BL.BusinessLogic
@@ -59,6 +61,36 @@ namespace BL.BusinessLogic
             }
             return null;
         }
+        public List<TaskDetailDto> GetListTaskByManagerId(Guid id)
+        {
+            try
+            {
+                var entity = new List<TaskEntity>();
+                var roleid = _uow.GetRepository<UserEntity>().GetAll().FirstOrDefault(c => c.Id == id).RoleId;
+                if (roleid == 2) {
+                var listUserid = new ArrayList();
+                var list = _uow.GetRepository<UserEntity>().GetAll().Where(c => c.ManagedBy == id).ToList();
+                foreach (var user in list)
+                {
+                    listUserid.Add(user.Id);
+                }
+                  entity = _uow.GetRepository<TaskEntity>().GetAll().Where(c => listUserid.Contains(c.AssignedTo)).ToList();
+                }
+                else if(roleid==3)
+                {
+                     entity = _uow.GetRepository<TaskEntity>().GetAll().ToList();
+                }
+                var result = _mapper.Map<List<TaskDetailDto>>(entity);
+                
+                return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+            return null;
+        }
 
         public bool CreateTask(CreateTaskRequest request)
         {
@@ -66,6 +98,7 @@ namespace BL.BusinessLogic
             {
                 var entity = _mapper.Map<TaskEntity>(request);
                 _uow.GetRepository<TaskEntity>().Insert(entity);
+                _uow.SaveChange();
                 return true;
             }
             catch (Exception e)
@@ -82,6 +115,7 @@ namespace BL.BusinessLogic
             {
                 var entity = _uow.GetRepository<TaskEntity>().GetAll().FirstOrDefault(c => c.Id == id);
                 _uow.GetRepository<TaskEntity>().Delete(entity);
+                _uow.SaveChange();
                 return true;
             }
             catch (Exception e)
@@ -98,8 +132,9 @@ namespace BL.BusinessLogic
             {
                 var entity = _uow.GetRepository<TaskEntity>().GetAll().FirstOrDefault(c => c.Id == request.Id);
                 var t = _mapper.Map<TaskEntity>(request);
-                entity = t;
-                _uow.GetRepository<TaskEntity>().Update(entity);
+                
+                _uow.GetRepository<TaskEntity>().Delete(entity);
+                _uow.GetRepository<TaskEntity>().Insert(t);
                 _uow.SaveChange();
                 return true;
             }

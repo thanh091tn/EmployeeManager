@@ -36,10 +36,22 @@ namespace API.Controllers
             return Ok(task);
         }
 
-        [HttpGet("GetTaskbyUserId")]
-        public IActionResult GetListTaskByUserId(Guid userid)
+        [HttpGet("{userId}")]
+        public IActionResult GetListTaskByUserId(Guid userId)
         {
-            var task = _taskLogic.GetListTaskByUserId(userid);
+            var task = _taskLogic.GetListTaskByUserId(userId);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(task);
+        }
+        [HttpGet("{managerId}")]
+        public IActionResult GetListTaskByManagerId(Guid managerId)
+        {
+            var task = _taskLogic.GetListTaskByUserId(managerId);
 
             if (task == null)
             {
