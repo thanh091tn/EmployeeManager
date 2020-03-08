@@ -31,7 +31,7 @@ namespace API.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            /*try
+            try
             {
                 var a = _uow.GetRepository<UserEntity>().GetAll().Where(c => c.Name.Equals("thanh123"));
                 return new string[] { a.Count().ToString(), "value2" };
@@ -39,7 +39,7 @@ namespace API.Controllers
             catch (Exception e)
             {
                 return new string[] { e.ToString() };
-            }*/
+            }
             return new string[] { "value1", "value2" };
         }
 
