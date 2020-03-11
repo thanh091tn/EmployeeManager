@@ -36,7 +36,7 @@ namespace API.Controllers
             return NotFound();
         }
         [HttpGet("{userId}")]
-        public IActionResult GetUser(Guid userId)
+        public IActionResult GetUser(string userId)
         {
             var rs = _userLogic.GetUserDetailById(userId);
 
@@ -94,7 +94,7 @@ namespace API.Controllers
             return NotFound();
         }
         [HttpDelete("{userId}")]
-        public IActionResult UpdateUser(Guid userId)
+        public IActionResult UpdateUser(string userId)
         {
             var rs = _userLogic.DeleteUserById(userId);
 

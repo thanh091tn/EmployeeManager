@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,7 +25,7 @@ namespace DAL.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<string>(nullable: false),
                     UserName = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     RoleId = table.Column<int>(nullable: false),
@@ -43,26 +43,6 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Attendance",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
-                    StartTime = table.Column<DateTime>(nullable: false),
-                    EndTime = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Attendance", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Attendance_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Task",
                 columns: table => new
                 {
@@ -74,10 +54,13 @@ namespace DAL.Migrations
                     NoteTime = table.Column<DateTime>(nullable: true),
                     StartTime = table.Column<DateTime>(nullable: false),
                     EndTime = table.Column<DateTime>(nullable: true),
-                    CreatedBy = table.Column<Guid>(nullable: false),
-                    AssignedTo = table.Column<Guid>(nullable: false),
-                    Updateby = table.Column<Guid>(nullable: true),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    AssignedTo = table.Column<string>(nullable: true),
+                    Updateby = table.Column<string>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: true),
+                    IsApproved = table.Column<bool>(nullable: false),
+                    IsAccepted = table.Column<bool>(nullable: false),
+                    IsDone = table.Column<bool>(nullable: false),
                     Reason = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -88,13 +71,28 @@ namespace DAL.Migrations
                         column: x => x.AssignedTo,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Attendance_UserId",
-                table: "Attendance",
-                column: "UserId");
+            migrationBuilder.CreateTable(
+                name: "UserManage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<string>(nullable: true),
+                    ManagedBy = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserManage", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserManage_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Task_AssignedTo",
@@ -105,15 +103,20 @@ namespace DAL.Migrations
                 name: "IX_User_RoleId",
                 table: "User",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserManage_UserId",
+                table: "UserManage",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Attendance");
+                name: "Task");
 
             migrationBuilder.DropTable(
-                name: "Task");
+                name: "UserManage");
 
             migrationBuilder.DropTable(
                 name: "User");

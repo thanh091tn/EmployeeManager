@@ -11,8 +11,8 @@ namespace BL.Interfaces
         UserDetailDto Login(string userid, string password);
         bool CreateUser(CreateNewUserRequest request);
         List<UserDetailDto> GetListUserDetail();
-        UserDetailDto GetUserDetailById(Guid id);
+        UserDetailDto GetUserDetailById(string id);
         bool UpdateUser(UpdateUserRequest request);
-        bool DeleteUserById(Guid id);
+        bool DeleteUserById(string id);
     }
 }

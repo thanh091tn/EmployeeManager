@@ -8,7 +8,6 @@ namespace DAL
         public DbSet<UserEntity> User { get; set; }
         public DbSet<RoleEntity> Role { get; set; }
         public DbSet<TaskEntity> Task { get; set; }
-        public DbSet<AttendanceEntity> Attendance { get; set; }
 
 
 

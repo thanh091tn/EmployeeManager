@@ -15,12 +15,13 @@ namespace BO.Models
         public DateTime? NoteTime { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public Guid CreatedBy { get; set; }
-        public Guid AssignedTo { get; set; }
-        public Guid? Updateby { get; set; }
+        public string CreatedBy { get; set; }
+        public string AssignedTo { get; set; }
+        public string Updateby { get; set; }
         public DateTime? UpdateTime { get; set; }
         public bool IsApproved { get; set; }
         public bool IsAccepted { get; set; }
+        public bool IsDone { get; set; }
         public string Reason { get; set; }
         [ForeignKey("AssignedTo")]
         public UserEntity User { get; set; }

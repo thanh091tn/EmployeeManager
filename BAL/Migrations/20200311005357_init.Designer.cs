@@ -10,34 +10,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200302085708_Init")]
-    partial class Init
+    [Migration("20200311005357_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
+                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("BO.Models.AttendanceEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("EndTime");
-
-                    b.Property<DateTime>("StartTime");
-
-                    b.Property<Guid>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Attendance");
-                });
 
             modelBuilder.Entity("BO.Models.RoleEntity", b =>
                 {
@@ -57,13 +39,19 @@ namespace DAL.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("AssignedTo");
+                    b.Property<string>("AssignedTo");
 
-                    b.Property<Guid>("CreatedBy");
+                    b.Property<string>("CreatedBy");
 
                     b.Property<string>("Description");
 
                     b.Property<DateTime?>("EndTime");
+
+                    b.Property<bool>("IsAccepted");
+
+                    b.Property<bool>("IsApproved");
+
+                    b.Property<bool>("IsDone");
 
                     b.Property<int?>("Mark");
 
@@ -79,7 +67,7 @@ namespace DAL.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<Guid?>("Updateby");
+                    b.Property<string>("Updateby");
 
                     b.HasKey("Id");
 
@@ -90,7 +78,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("BO.Models.UserEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name");
@@ -108,20 +96,28 @@ namespace DAL.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("BO.Models.AttendanceEntity", b =>
+            modelBuilder.Entity("BO.Models.UserManage", b =>
                 {
-                    b.HasOne("BO.Models.UserEntity", "User")
-                        .WithMany("Attendance")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ManagedBy");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserManage");
                 });
 
             modelBuilder.Entity("BO.Models.TaskEntity", b =>
                 {
                     b.HasOne("BO.Models.UserEntity", "User")
                         .WithMany("Task")
-                        .HasForeignKey("AssignedTo")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AssignedTo");
                 });
 
             modelBuilder.Entity("BO.Models.UserEntity", b =>
@@ -130,6 +126,13 @@ namespace DAL.Migrations
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BO.Models.UserManage", b =>
+                {
+                    b.HasOne("BO.Models.UserEntity", "User")
+                        .WithMany("UserManages")
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,9 +9,9 @@ namespace BL.Interfaces
     public interface ITaskLogic
     {
         TaskDetailDto GetTaskByTaskId(Guid id);
-        List<TaskDetailDto> GetListTaskByUserId(Guid id);
+        List<TaskDetailDto> GetListTaskByUserId(string id);
         bool CreateTask(CreateTaskRequest request);
         bool DeleteTask(Guid id);
-        bool UpdateTask(UpdateTaskRequest request);
+        bool UpdateTask(CreateTaskRequest request);
     }
 }

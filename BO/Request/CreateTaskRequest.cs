@@ -6,10 +6,11 @@ namespace BO.Request
 {
     public class CreateTaskRequest
     {
+        public Guid id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime StartTime { get; set; }
-        public Guid CreatedBy { get; set; }
-        public Guid AssignedTo { get; set; }
+        public string userid { get; set; }
+        public string AssignedTo { get; set; }
     }
 }

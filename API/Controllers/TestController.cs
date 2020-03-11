@@ -33,7 +33,7 @@ namespace API.Controllers
         {
             try
             {
-                var a = _uow.GetRepository<UserEntity>().GetAll().Where(c => c.Name.Equals("thanh123"));
+                var a = _uow.GetRepository<UserEntity>().GetAll().Where(c => c.Id.Equals("thanh123"));
                 return new string[] { a.Count().ToString(), "value2" };
             }
             catch (Exception e)

@@ -51,13 +51,13 @@ namespace BL.BusinessLogic
             return new UserDetailDto
             {
                 Id = User.Id,
-                Name = User.Name,
+                Name = User.UserName,
                 RoleId = User.RoleId,
                 RoleName = User.RoleEntity.Name
             };
         }
 
-        public UserDetailDto GetUserDetailById(Guid id)
+        public UserDetailDto GetUserDetailById(string id)
         {
             var entity = _uow.GetRepository<UserEntity>().GetAll().FirstOrDefault(c => c.Id == id);
             var result = _mapper.Map<UserDetailDto>(entity);
@@ -70,7 +70,7 @@ namespace BL.BusinessLogic
             return result ;
         }
 
-        public bool DeleteUserById(Guid id)
+        public bool DeleteUserById(string id)
         {
             var entity = _uow.GetRepository<UserEntity>().GetAll().FirstOrDefault(c => c.Id == id);
             if(entity != null) { 
@@ -91,8 +91,12 @@ namespace BL.BusinessLogic
                 if (request.RoleId == 2) { 
                 foreach (var employee in request.ListEmployee)
                 {
-                    var temp = _uow.GetRepository<UserEntity>().GetAll().FirstOrDefault(c => c.Id == employee);
-                    temp.ManagedBy = entity.Id;
+                    _uow.GetRepository<UserManage>().Insert(new UserManage
+                    {
+                        ManagedBy = request.Name,
+                        UserId = employee
+                    });
+                    
                 }
                 }
                 _uow.SaveChange();
@@ -124,7 +128,7 @@ namespace BL.BusinessLogic
                 {
                     foreach (var employee in request.ListEmployee)
                     {
-                        var temp = _uow.GetRepository<UserEntity>().GetAll().FirstOrDefault(c => c.Id == employee);
+                        var temp = _uow.GetRepository<UserManage>().GetAll().FirstOrDefault(c => c.UserId == employee);
                         temp.ManagedBy = entity.Id;
                     }
                 }

@@ -37,7 +37,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{userId}")]
-        public IActionResult GetListTaskByUserId(Guid userId)
+        public IActionResult GetListTaskByUserId(string userId)
         {
             var task = _taskLogic.GetListTaskByUserId(userId);
 
@@ -48,8 +48,8 @@ namespace API.Controllers
 
             return Ok(task);
         }
-        [HttpGet("{managerId}")]
-        public IActionResult GetListTaskByManagerId(Guid managerId)
+        [HttpGet("GetListTakManager")]
+        public IActionResult GetListTaskByManagerId(string managerId)
         {
             var task = _taskLogic.GetListTaskByUserId(managerId);
 
@@ -74,7 +74,7 @@ namespace API.Controllers
             return NotFound();
         }
         [HttpPost]
-        public IActionResult UpdateTask([FromBody]UpdateTaskRequest request)
+        public IActionResult UpdateTask([FromBody]CreateTaskRequest request)
         {
             var task = _taskLogic.UpdateTask(request);
 

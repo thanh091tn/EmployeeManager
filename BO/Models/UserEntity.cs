@@ -9,18 +9,16 @@ namespace BO.Models
     public class UserEntity
     {
         [Key]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public string UserName { get; set; }
 
         public string Password { get; set; }
         public int RoleId { get; set; }
-        public Guid? ManagedBy { get; set; }
-        public string Name { get; set; }
         [ForeignKey("RoleId")]
         public RoleEntity RoleEntity { get; set; }
 
+        public ICollection<UserManage> UserManages { get; set; }
         public ICollection<TaskEntity> Task { get; set; }
-        public ICollection<AttendanceEntity> Attendance { get; set; }
     }
 }

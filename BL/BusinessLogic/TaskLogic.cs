@@ -44,12 +44,12 @@ namespace BL.BusinessLogic
             return null;
         }
 
-        public List<TaskDetailDto> GetListTaskByUserId(Guid id)
+        public List<TaskDetailDto> GetListTaskByUserId(string id)
         {
             try
             {
 
-                var entity = _uow.GetRepository<TaskEntity>().GetAll().Where(c => c.AssignedTo == id);
+                var entity = _uow.GetRepository<TaskEntity>().GetAll().Where(c => c.AssignedTo.Equals(id));
                 var result = _mapper.Map<List<TaskDetailDto>>(entity);
                 
                 return result;
@@ -61,7 +61,7 @@ namespace BL.BusinessLogic
             }
             return null;
         }
-        public List<TaskDetailDto> GetListTaskByManagerId(Guid id)
+        public List<TaskDetailDto> GetListTaskByManagerId(string id)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace BL.BusinessLogic
                 var roleid = _uow.GetRepository<UserEntity>().GetAll().FirstOrDefault(c => c.Id == id).RoleId;
                 if (roleid == 2) {
                 var listUserid = new ArrayList();
-                var list = _uow.GetRepository<UserEntity>().GetAll().Where(c => c.ManagedBy == id).ToList();
+                var list = _uow.GetRepository<UserManage>().GetAll().Where(c => c.ManagedBy == id).ToList();
                 foreach (var user in list)
                 {
                     listUserid.Add(user.Id);
@@ -126,17 +126,32 @@ namespace BL.BusinessLogic
             return false;
         }
 
-        public bool UpdateTask(UpdateTaskRequest request)
+        public bool UpdateTask(CreateTaskRequest request)
         {
             try
             {
-                var entity = _uow.GetRepository<TaskEntity>().GetAll().FirstOrDefault(c => c.Id == request.Id);
+                var entity = _uow.GetRepository<TaskEntity>().GetAll().FirstOrDefault(c => c.Id == request.id);
                 var t = _mapper.Map<TaskEntity>(request);
+
                 
-                _uow.GetRepository<TaskEntity>().Delete(entity);
-                _uow.GetRepository<TaskEntity>().Insert(t);
-                _uow.SaveChange();
-                return true;
+                if (entity != null)
+                {
+                    entity.StartTime = request.StartTime;
+                    entity.Name = request.Name;
+                    entity.Description = request.Description;
+                    entity.Updateby = request.userid;
+                    _uow.GetRepository<TaskEntity>().Update(entity);
+                    _uow.SaveChange();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+                /*_uow.GetRepository<TaskEntity>().Delete(entity);
+                _uow.GetRepository<TaskEntity>().Insert(t);*/
+                
             }
             catch (Exception e)
             {
