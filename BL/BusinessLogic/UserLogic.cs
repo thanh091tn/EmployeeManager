@@ -41,7 +41,7 @@ namespace BL.BusinessLogic
 
 
             var User = _uow.GetRepository<UserEntity>().GetAll().Include(c => c.RoleEntity)
-                .FirstOrDefault(user => Equals(user.UserName, userid) && user.Password == password);
+                .FirstOrDefault(user => user.Id.Equals(userid) && user.Password == password);
 
             if (User == null)
             {
@@ -65,7 +65,7 @@ namespace BL.BusinessLogic
         }
         public List<UserDetailDto> GetListUserDetail()
         {
-            var entity = _uow.GetRepository<UserEntity>().GetAll().ToList();
+            var entity = _uow.GetRepository<UserEntity>().GetAll().Include(c => c.RoleEntity).ToList();
             var result = _mapper.Map<List<UserDetailDto>>(entity);
             return result ;
         }
