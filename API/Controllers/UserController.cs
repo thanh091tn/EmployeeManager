@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BL.Interfaces;
 using BO.Dtos;
@@ -38,7 +39,10 @@ namespace API.Controllers
         [HttpGet("{userId}")]
         public IActionResult GetUser(string userId)
         {
-            var rs = _userLogic.GetUserDetailById(userId);
+            
+            var b = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var rs = _userLogic.GetUserDetailById(b);
 
             if (rs != null)
             {

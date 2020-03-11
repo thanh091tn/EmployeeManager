@@ -40,20 +40,33 @@ namespace BL.BusinessLogic
         {
 
 
-            var User = _uow.GetRepository<UserEntity>().GetAll().Include(c => c.RoleEntity)
-                .FirstOrDefault(user => user.Id.Equals(userid) && user.Password == password);
+            var User = _uow.GetRepository<UserEntity>().GetAll()
+                .FirstOrDefault(user => user.Id == userid && user.Password == password);
 
             if (User == null)
             {
                 return null;
             }
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, User.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
 
             return new UserDetailDto
             {
-                Id = User.Id,
                 UserName = User.UserName,
-                RoleId = User.RoleId,
-                RoleName = User.RoleEntity.Name
+                Token = tokenString,
+                Id = User.Id,
+                RoleId = User.RoleId
             };
         }
 
