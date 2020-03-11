@@ -82,7 +82,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateUser([FromBody] UpdateUserRequest request)
+        public IActionResult UpdateUser([FromBody] CreateNewUserRequest request)
         {
             var rs = _userLogic.UpdateUser(request);
 

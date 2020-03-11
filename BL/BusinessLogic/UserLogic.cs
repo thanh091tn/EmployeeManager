@@ -51,7 +51,7 @@ namespace BL.BusinessLogic
             return new UserDetailDto
             {
                 Id = User.Id,
-                Name = User.UserName,
+                UserName = User.UserName,
                 RoleId = User.RoleId,
                 RoleName = User.RoleEntity.Name
             };
@@ -86,19 +86,15 @@ namespace BL.BusinessLogic
         {
             try
             {
-                var entity = _mapper.Map<UserEntity>(request);
-                _uow.GetRepository<UserEntity>().Insert(entity);
-                if (request.RoleId == 2) { 
-                foreach (var employee in request.ListEmployee)
+                
+                _uow.GetRepository<UserEntity>().Insert(new UserEntity
                 {
-                    _uow.GetRepository<UserManage>().Insert(new UserManage
-                    {
-                        ManagedBy = request.Name,
-                        UserId = employee
-                    });
-                    
-                }
-                }
+                    Id = request.UserId,
+                    Password = request.Password,
+                    RoleId = request.RoleId,
+                    UserName = request.Name
+                });
+                
                 _uow.SaveChange();
                 return true;
             }
@@ -110,28 +106,26 @@ namespace BL.BusinessLogic
             return false;
         }
 
-        public bool UpdateUser(UpdateUserRequest request)
+        public bool UpdateUser(CreateNewUserRequest request)
         {
             try
             {
                 var entity = _mapper.Map<UserEntity>(request);
-                var t = _uow.GetRepository<UserEntity>().GetAll().FirstOrDefault(c => c.Id == request.Id);
-                if (t != null) { 
-                _uow.GetRepository<UserEntity>().Delete(t);
+                var t = _uow.GetRepository<UserEntity>().GetAll().FirstOrDefault(c => c.Id == request.UserId);
+                if (t != null)
+                {
+                    
+                    t.RoleId = request.RoleId;
+                    t.UserName = request.Name;
+                    t.Password = request.Password;
+                    _uow.GetRepository<UserEntity>().Update(t);
                 }
                 else
                 {
                     return false;
                 }
-                _uow.GetRepository<UserEntity>().Insert(entity);
-                if (request.RoleId == 2)
-                {
-                    foreach (var employee in request.ListEmployee)
-                    {
-                        var temp = _uow.GetRepository<UserManage>().GetAll().FirstOrDefault(c => c.UserId == employee);
-                        temp.ManagedBy = entity.Id;
-                    }
-                }
+                
+                
                 _uow.SaveChange();
                 return true;
             }

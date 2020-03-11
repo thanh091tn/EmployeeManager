@@ -12,7 +12,7 @@ namespace BL.Interfaces
         bool CreateUser(CreateNewUserRequest request);
         List<UserDetailDto> GetListUserDetail();
         UserDetailDto GetUserDetailById(string id);
-        bool UpdateUser(UpdateUserRequest request);
+        bool UpdateUser(CreateNewUserRequest request);
         bool DeleteUserById(string id);
     }
 }
