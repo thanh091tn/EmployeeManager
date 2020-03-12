@@ -151,6 +151,7 @@ namespace BL.BusinessLogic
                     Name = request.Name,
                     Description =  request.Description,
                     StartTime = request.StartTime,
+                    EndTime = request.EndTime,
                     CreatedBy = uid,
                     Updateby = uid,
                     UpdateTime = DateTime.Now,
@@ -194,6 +195,7 @@ namespace BL.BusinessLogic
 
                 if (entity != null)
                 {
+                    entity.EndTime = request.EndTime;
                     entity.StartTime = request.StartTime;
                     entity.Name = request.Name;
                     entity.Description = request.Description;
@@ -229,6 +231,7 @@ namespace BL.BusinessLogic
                 
                 if (entity != null)
                 {
+                    entity.EndTime = request.EndTime;
                     entity.StartTime = request.StartTime;
                     entity.Name = request.Name;
                     entity.Description = request.Description;
@@ -275,7 +278,7 @@ namespace BL.BusinessLogic
             try
             {
                 var entity = _uow.GetRepository<TaskEntity>().GetAll().FirstOrDefault(c => c.Id == taskId);
-                entity.EndTime = DateTime.Now;
+                
                 entity.IsDone = isdone;
                 entity.UpdateTime = DateTime.Now;
                 entity.Updateby = _userHelper.GetUserId();
