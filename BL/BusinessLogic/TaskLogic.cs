@@ -100,7 +100,7 @@ namespace BL.BusinessLogic
             try
             {
                 var uid = _userHelper.GetUserId();
-                var entity = _mapper.Map<TaskEntity>(request);
+                
                 _uow.GetRepository<TaskEntity>().Insert(new TaskEntity
                 {
                     Name = request.Name,
@@ -119,7 +119,6 @@ namespace BL.BusinessLogic
                 Console.WriteLine(e);
                 return false;
             }
-            return false;
         }
 
         public bool DeleteTask(Guid id)

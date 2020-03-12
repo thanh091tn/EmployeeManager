@@ -66,7 +66,7 @@ namespace API.Controllers
         {
             var task = _taskLogic.CreateTask(request);
 
-            if (task)
+            if (task==true)
             {
                 return Ok();
             }
