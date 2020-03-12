@@ -47,7 +47,7 @@ namespace BL.BusinessLogic
 
         
 
-        public List<TaskDetailDto> GetListTaskByUserId(string id)
+        public List<TaskDetailDto> GetListTaskByUserId()
         {
             try
             {
@@ -64,6 +64,51 @@ namespace BL.BusinessLogic
             }
             return null;
         }
+
+        public List<TaskDetailDto> GetListTaskManager()
+        {
+            try
+            {
+                var uid = _userHelper.GetUserId();
+                var e = _uow.GetRepository<UserManage>().GetAll().Where(c => c.ManagedBy == uid).ToList();
+                var listid = new ArrayList();
+                foreach (UserManage t in e)
+                {
+                    listid.Add(t.UserId);
+                }
+                
+                var entity = _uow.GetRepository<TaskEntity>().GetAll().Where(c => listid.Contains(c.AssignedTo));
+                var result = _mapper.Map<List<TaskDetailDto>>(entity);
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+            return null;
+        }
+
+        public List<TaskDetailDto> GetListTaskAdmin()
+        {
+            try
+            {
+                
+                var entity = _uow.GetRepository<TaskEntity>().GetAll().Where(c => c.IsApproved == false);
+                var result = _mapper.Map<List<TaskDetailDto>>(entity);
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+            return null;
+        }
+
+
         public List<TaskDetailDto> GetListTaskByManagerId(string id)
         {
             try
@@ -230,7 +275,7 @@ namespace BL.BusinessLogic
             try
             {
                 var entity = _uow.GetRepository<TaskEntity>().GetAll().FirstOrDefault(c => c.Id == taskId);
-                
+                entity.EndTime = DateTime.Now;
                 entity.IsDone = isdone;
                 entity.UpdateTime = DateTime.Now;
                 entity.Updateby = _userHelper.GetUserId();

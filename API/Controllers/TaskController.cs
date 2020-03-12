@@ -21,12 +21,12 @@ namespace API.Controllers
             _taskLogic = taskLogic;
         }
 
+        
+
         [HttpGet]
-        public IActionResult GetTaskById(Guid taskId)
+        public IActionResult GetListTaskByUserId()
         {
-            
-
-            var task = _taskLogic.GetTaskByTaskId(taskId);
+            var task = _taskLogic.GetListTaskByUserId();
 
             if (task == null)
             {
@@ -35,11 +35,10 @@ namespace API.Controllers
 
             return Ok(task);
         }
-
-        [HttpGet("{userId}")]
-        public IActionResult GetListTaskByUserId(string userId)
+        [HttpGet("GetListTaskManager")]
+        public IActionResult GetListTaskManager()
         {
-            var task = _taskLogic.GetListTaskByUserId(userId);
+            var task = _taskLogic.GetListTaskManager();
 
             if (task == null)
             {
@@ -48,10 +47,10 @@ namespace API.Controllers
 
             return Ok(task);
         }
-        [HttpGet("GetListTakManager")]
-        public IActionResult GetListTaskByManagerId(string managerId)
+        [HttpGet("GetListTaskAdmin")]
+        public IActionResult GetListTaskAdmin()
         {
-            var task = _taskLogic.GetListTaskByUserId(managerId);
+            var task = _taskLogic.GetListTaskAdmin();
 
             if (task == null)
             {
