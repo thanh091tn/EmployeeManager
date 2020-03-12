@@ -14,5 +14,7 @@ namespace BL.Interfaces
         bool DeleteTask(Guid id);
         bool UpdateTask(CreateTaskRequest request);
         bool AssignTask(CreateTaskRequest request);
+        bool AproveTask(Guid taskId, bool isapprove);
+        bool FinishTask(Guid taskId, bool isdone);
     }
 }

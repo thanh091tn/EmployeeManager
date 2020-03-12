@@ -99,6 +99,31 @@ namespace API.Controllers
             return NotFound();
         }
 
+        [HttpGet("Approve")]
+        public IActionResult ApproveTask(Guid taskId,bool isapprove)
+        {
+            var task = _taskLogic.AproveTask(taskId,isapprove);
+
+            if (task)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+        [HttpGet("Finish")]
+        public IActionResult FinishTask(Guid taskId, bool isdone)
+        {
+            var task = _taskLogic.FinishTask(taskId, isdone);
+            if (task)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
+
 
         [HttpDelete]
         public IActionResult DeleteTask(Guid taskId)

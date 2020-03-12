@@ -205,5 +205,44 @@ namespace BL.BusinessLogic
                 return false;
             }
         }
+
+        public bool AproveTask(Guid taskId, bool isapprove)
+        {
+            try
+            {
+                var entity = _uow.GetRepository<TaskEntity>().GetAll().FirstOrDefault(c => c.Id == taskId);
+                if(isapprove)
+                entity.IsApproved = isapprove;
+                entity.UpdateTime = DateTime.Now;
+                entity.Updateby = _userHelper.GetUserId();
+                _uow.GetRepository<TaskEntity>().Update(entity);
+                _uow.SaveChange();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+            return true;
+        }
+        public bool FinishTask(Guid taskId,  bool isdone)
+        {
+            try
+            {
+                var entity = _uow.GetRepository<TaskEntity>().GetAll().FirstOrDefault(c => c.Id == taskId);
+                
+                entity.IsDone = isdone;
+                entity.UpdateTime = DateTime.Now;
+                entity.Updateby = _userHelper.GetUserId();
+                _uow.GetRepository<TaskEntity>().Update(entity);
+                _uow.SaveChange();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+            return true;
+        }
     }
 }
