@@ -15,6 +15,8 @@ namespace BO.Models
 
         public string Password { get; set; }
         public int RoleId { get; set; }
+        public string UpdatedBy { get; set; }
+        public DateTime UpdateTime { get; set; }
         [ForeignKey("RoleId")]
         public RoleEntity RoleEntity { get; set; }
 

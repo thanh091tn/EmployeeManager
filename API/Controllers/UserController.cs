@@ -24,6 +24,20 @@ namespace API.Controllers
             _userLogic = userLogic;
         }
 
+        [HttpGet("GetListUserId")]
+        public IActionResult GetListUserId()
+        {
+            var rs = _userLogic.GetListUser();
+
+            if (rs != null)
+            {
+                return Ok(rs);
+            }
+
+            return NotFound();
+        }
+
+
         [HttpGet]
         public IActionResult GetListUser()
         {
@@ -40,9 +54,9 @@ namespace API.Controllers
         public IActionResult GetUser(string userId)
         {
             
-            var b = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+           
 
-            var rs = _userLogic.GetUserDetailById(b);
+            var rs = _userLogic.GetUserDetailById(userId);
 
             if (rs != null)
             {

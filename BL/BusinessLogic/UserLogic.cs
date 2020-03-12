@@ -35,6 +35,19 @@ namespace BL.BusinessLogic
             _appSettings = appSettings.Value;
         }
 
+        public List<String> GetListUser()
+        {
+            List<String> rs = new List<string>();
+            var l = _uow.GetRepository<UserEntity>().GetAll().ToList();
+            foreach (UserEntity user in l)
+            {
+                rs.Add(user.Id);
+            }
+
+            return rs;
+        }
+
+
         //business logic Login
         public UserDetailDto Login(string userid, string password)
         {
@@ -105,7 +118,9 @@ namespace BL.BusinessLogic
                     Id = request.UserId,
                     Password = request.Password,
                     RoleId = request.RoleId,
-                    UserName = request.Name
+                    UserName = request.Name,
+                    UpdateTime = DateTime.Now,
+                    UpdatedBy = _userHelper.GetUserId()
                 });
                 
                 _uow.SaveChange();
@@ -127,7 +142,8 @@ namespace BL.BusinessLogic
                 var t = _uow.GetRepository<UserEntity>().GetAll().FirstOrDefault(c => c.Id == request.UserId);
                 if (t != null)
                 {
-                    
+                    t.UpdateTime = DateTime.Now;
+                    t.UpdatedBy = _userHelper.GetUserId();
                     t.RoleId = request.RoleId;
                     t.UserName = request.Name;
                     t.Password = request.Password;

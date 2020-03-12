@@ -13,15 +13,15 @@ namespace BL.Commons
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        public Guid GetUserId()
+        public string GetUserId()
         {
 
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
             {
-                return Guid.Parse("00000000-0000-0000-0000-000000000000");
+                return "";
             }
-            return Guid.Parse(userId);
+            return userId;
         }
     }
 }

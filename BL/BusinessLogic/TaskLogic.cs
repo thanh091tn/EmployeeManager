@@ -20,11 +20,12 @@ namespace BL.BusinessLogic
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
-
-        public TaskLogic( IUnitOfWork uow, IMapper mapper)
+        private readonly UserHelper _userHelper;
+        public TaskLogic( IUnitOfWork uow, IMapper mapper, UserHelper userHelper)
         {
             _uow = uow;
             _mapper = mapper;
+            _userHelper = userHelper;
         }
 
         public TaskDetailDto GetTaskByTaskId(Guid id)
@@ -44,12 +45,14 @@ namespace BL.BusinessLogic
             return null;
         }
 
+        
+
         public List<TaskDetailDto> GetListTaskByUserId(string id)
         {
             try
             {
-
-                var entity = _uow.GetRepository<TaskEntity>().GetAll().Where(c => c.AssignedTo.Equals(id));
+                var uid = _userHelper.GetUserId();
+                var entity = _uow.GetRepository<TaskEntity>().GetAll().Where(c => c.AssignedTo.Equals(uid));
                 var result = _mapper.Map<List<TaskDetailDto>>(entity);
                 
                 return result;
@@ -96,8 +99,18 @@ namespace BL.BusinessLogic
         {
             try
             {
+                var uid = _userHelper.GetUserId();
                 var entity = _mapper.Map<TaskEntity>(request);
-                _uow.GetRepository<TaskEntity>().Insert(entity);
+                _uow.GetRepository<TaskEntity>().Insert(new TaskEntity
+                {
+                    Name = request.Name,
+                    Description =  request.Description,
+                    StartTime = request.StartTime,
+                    CreatedBy = uid,
+                    Updateby = uid,
+                    UpdateTime = DateTime.Now,
+                    AssignedTo = uid
+                });
                 _uow.SaveChange();
                 return true;
             }
@@ -126,20 +139,22 @@ namespace BL.BusinessLogic
             return false;
         }
 
-        public bool UpdateTask(CreateTaskRequest request)
+
+        public bool AssignTask(CreateTaskRequest request)
         {
             try
             {
                 var entity = _uow.GetRepository<TaskEntity>().GetAll().FirstOrDefault(c => c.Id == request.id);
                 var t = _mapper.Map<TaskEntity>(request);
+                var uid = _userHelper.GetUserId();
 
-                
                 if (entity != null)
                 {
                     entity.StartTime = request.StartTime;
                     entity.Name = request.Name;
                     entity.Description = request.Description;
-                    entity.Updateby = request.userid;
+                    entity.Updateby = uid;
+                    entity.AssignedTo = request.AssignedTo;
                     _uow.GetRepository<TaskEntity>().Update(entity);
                     _uow.SaveChange();
                     return true;
@@ -151,14 +166,45 @@ namespace BL.BusinessLogic
 
                 /*_uow.GetRepository<TaskEntity>().Delete(entity);
                 _uow.GetRepository<TaskEntity>().Insert(t);*/
-                
+
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 return false;
             }
-            return false;
+        }
+
+        public bool UpdateTask(CreateTaskRequest request)
+        {
+            try
+            {
+                var entity = _uow.GetRepository<TaskEntity>().GetAll().FirstOrDefault(c => c.Id == request.id);
+                var t = _mapper.Map<TaskEntity>(request);
+                var uid = _userHelper.GetUserId();
+                
+                if (entity != null)
+                {
+                    entity.StartTime = request.StartTime;
+                    entity.Name = request.Name;
+                    entity.Description = request.Description;
+                    entity.Updateby = uid;
+                    entity.UpdateTime = DateTime.Now;
+                    _uow.GetRepository<TaskEntity>().Update(entity);
+                    _uow.SaveChange();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
         }
     }
 }

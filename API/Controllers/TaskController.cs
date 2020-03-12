@@ -86,8 +86,22 @@ namespace API.Controllers
             return NotFound();
         }
 
+        [HttpPost("UpdateTaskAdmin")]
+        public IActionResult UpdateTaskAdmin([FromBody]CreateTaskRequest request)
+        {
+            var task = _taskLogic.UpdateTask(request);
+
+            if (task)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
+
         [HttpDelete]
-        public IActionResult UpdateTask(Guid taskId)
+        public IActionResult DeleteTask(Guid taskId)
         {
             var task = _taskLogic.DeleteTask(taskId);
 
