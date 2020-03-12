@@ -89,7 +89,7 @@ namespace API.Controllers
         [HttpPost("UpdateTaskAdmin")]
         public IActionResult UpdateTaskAdmin([FromBody]CreateTaskRequest request)
         {
-            var task = _taskLogic.UpdateTask(request);
+            var task = _taskLogic.AssignTask(request);
 
             if (task)
             {
