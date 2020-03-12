@@ -35,13 +35,17 @@ namespace BL.BusinessLogic
             _appSettings = appSettings.Value;
         }
 
-        public List<String> GetListUser()
+        public List<UserDetailDto> GetListUser()
         {
-            List<String> rs = new List<string>();
+            List<UserDetailDto> rs = new List<UserDetailDto>();
             var l = _uow.GetRepository<UserEntity>().GetAll().ToList();
             foreach (UserEntity user in l)
             {
-                rs.Add(user.Id);
+                rs.Add(new UserDetailDto
+                {
+                    Id = user.Id,
+                    UserName =  user.UserName
+                });
             }
 
             return rs;
