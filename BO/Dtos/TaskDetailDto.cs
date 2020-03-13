@@ -9,7 +9,7 @@ namespace BO.Dtos
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int Mark { get; set; }
+        public double Mark { get; set; }
         public string Note { get; set; }
         public DateTime NoteTime { get; set; }
         public DateTime StartTime { get; set; }
@@ -22,5 +22,6 @@ namespace BO.Dtos
         public bool IsApproved { get; set; }
         public bool IsAccepted { get; set; }
         public bool IsDone { get; set; }
+        public int Status { get; set; }
     }
 }

@@ -155,7 +155,9 @@ namespace BL.BusinessLogic
                     CreatedBy = uid,
                     Updateby = uid,
                     UpdateTime = DateTime.Now,
-                    AssignedTo = uid
+                    AssignedTo = uid,
+                    Status = 1
+                    
                 });
                 _uow.SaveChange();
                 return true;
@@ -263,6 +265,7 @@ namespace BL.BusinessLogic
                 entity.IsApproved = isapprove;
                 entity.UpdateTime = DateTime.Now;
                 entity.Updateby = _userHelper.GetUserId();
+                entity.Status = 2;
                 _uow.GetRepository<TaskEntity>().Update(entity);
                 _uow.SaveChange();
             }
@@ -282,6 +285,7 @@ namespace BL.BusinessLogic
                 entity.IsDone = isdone;
                 entity.UpdateTime = DateTime.Now;
                 entity.Updateby = _userHelper.GetUserId();
+                entity.Status = 3;
                 _uow.GetRepository<TaskEntity>().Update(entity);
                 _uow.SaveChange();
             }
