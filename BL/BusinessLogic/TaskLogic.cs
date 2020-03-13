@@ -102,7 +102,7 @@ namespace BL.BusinessLogic
             try
             {
                 
-                var entity = _uow.GetRepository<TaskEntity>().GetAll().Where(c => c.IsApproved == false);
+                var entity = _uow.GetRepository<TaskEntity>().GetAll().ToList();
                 var result = _mapper.Map<List<TaskDetailDto>>(entity);
 
                 return result;
