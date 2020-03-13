@@ -74,7 +74,14 @@ namespace BL.BusinessLogic
                 var listid = new ArrayList();
                 foreach (UserManage t in e)
                 {
-                    listid.Add(t.UserId);
+                    var f = _uow.GetRepository<UserEntity>().GetAll().Where(c => c.GroupId == t.Id).ToList();
+                    if (f != null)
+                    {
+                        foreach (var user in f)
+                        {
+                            listid.Add(user.Id);
+                        }
+                    }
                 }
                 
                 var entity = _uow.GetRepository<TaskEntity>().GetAll().Where(c => listid.Contains(c.AssignedTo));

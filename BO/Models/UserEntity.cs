@@ -17,10 +17,12 @@ namespace BO.Models
         public int RoleId { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime UpdateTime { get; set; }
+        public int GroupId { get; set; }
         [ForeignKey("RoleId")]
         public RoleEntity RoleEntity { get; set; }
 
-        public ICollection<UserManage> UserManages { get; set; }
+        [ForeignKey("GroupId")]
+        public UserManage UserManages { get; set; }
         public ICollection<TaskEntity> Task { get; set; }
     }
 }

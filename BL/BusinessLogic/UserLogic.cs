@@ -51,6 +51,50 @@ namespace BL.BusinessLogic
             return rs;
         }
 
+        public List<ManageDto> GetGroup()
+        {
+            List<ManageDto> rs = new List<ManageDto>();
+            var l = _uow.GetRepository<UserManage>().GetAll().ToList();
+            foreach (UserManage user in l)
+            {
+                rs.Add(new ManageDto
+                {
+                    Id = user.Id,
+                    Name = user.Name
+                });
+            }
+
+            return rs;
+        }
+        public bool CreateGroup(string name , string uid)
+        {
+            try
+            {
+                _uow.GetRepository<UserManage>().Insert(new UserManage
+                {
+                    ManagedBy = uid,
+                    Name = name
+                });
+
+                _uow.SaveChange();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+            
+           
+        }
+
+        public List<UserDetailDto> GetListManager()
+        {
+            var entity = _uow.GetRepository<UserEntity>().GetAll().Include(c => c.RoleEntity).Where(c => c.RoleId ==2).ToList();
+            var result = _mapper.Map<List<UserDetailDto>>(entity);
+            return result;
+        }
+
 
         //business logic Login
         public UserDetailDto Login(string userid, string password)
@@ -100,6 +144,8 @@ namespace BL.BusinessLogic
             return result ;
         }
 
+
+
         public bool DeleteUserById(string id)
         {
             var entity = _uow.GetRepository<UserEntity>().GetAll().FirstOrDefault(c => c.Id == id);
@@ -124,7 +170,8 @@ namespace BL.BusinessLogic
                     RoleId = request.RoleId,
                     UserName = request.Name,
                     UpdateTime = DateTime.Now,
-                    UpdatedBy = _userHelper.GetUserId()
+                    UpdatedBy = _userHelper.GetUserId(),
+                    GroupId = 1
                 });
                 
                 _uow.SaveChange();
@@ -151,6 +198,7 @@ namespace BL.BusinessLogic
                     t.RoleId = request.RoleId;
                     t.UserName = request.Name;
                     t.Password = request.Password;
+                    t.GroupId = request.GroupId;
                     _uow.GetRepository<UserEntity>().Update(t);
                 }
                 else

@@ -12,5 +12,6 @@ namespace BO.Dtos
         public string Password { get; set; }
         public int RoleId { get; set; }
         public string Token { get; set; }
+        public int GroupId { get; set; }
     }
 }

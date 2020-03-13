@@ -36,6 +36,18 @@ namespace API.Controllers
 
             return NotFound();
         }
+        [HttpGet("GetListManagerId")]
+        public IActionResult GetListManagerId()
+        {
+            var rs = _userLogic.GetListManager();
+
+            if (rs != null)
+            {
+                return Ok(rs);
+            }
+
+            return NotFound();
+        }
 
 
         [HttpGet]
@@ -98,6 +110,35 @@ namespace API.Controllers
 
             return NotFound();
         }
+
+        [HttpGet("GetGroup")]
+        public IActionResult GetGroup()
+        {
+
+            var rs = _userLogic.GetGroup();
+
+            if (rs != null)
+            {
+                return Ok(rs);
+            }
+
+            return NotFound();
+        }
+
+        [HttpGet("CreateGroup")]
+        public IActionResult CreateGroup(string name , string uid)
+        {
+
+            var rs = _userLogic.CreateGroup(name,uid);
+
+            if (rs )
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
 
         [HttpPost]
         public IActionResult UpdateUser([FromBody] CreateNewUserRequest request)
