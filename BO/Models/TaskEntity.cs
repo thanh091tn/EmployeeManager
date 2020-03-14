@@ -23,6 +23,7 @@ namespace BO.Models
         public bool IsAccepted { get; set; }
         public bool IsDone { get; set; }
         public int Status { get; set; }
+        public bool IsConfirm { get; set; }
         public string Reason { get; set; }
         [ForeignKey("AssignedTo")]
         public UserEntity User { get; set; }

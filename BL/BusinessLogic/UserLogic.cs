@@ -75,7 +75,14 @@ namespace BL.BusinessLogic
                     ManagedBy = uid,
                     Name = name
                 });
+                _uow.SaveChange();
 
+                var user = _uow.GetRepository<UserEntity>().GetAll().FirstOrDefault(c => c.Id == uid);
+                if (user != null)
+                {
+                    user.GroupId = _uow.GetRepository<UserManage>().GetAll().Max(c => c.Id);
+                }
+                _uow.GetRepository<UserEntity>().Update(user);
                 _uow.SaveChange();
                 return true;
             }

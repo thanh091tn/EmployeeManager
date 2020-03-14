@@ -122,6 +122,30 @@ namespace API.Controllers
             return NotFound();
         }
 
+        [HttpPost("Confirm")]
+        public IActionResult ConfirmTask(ConfirmTaskRequest request)
+        {
+            var task = _taskLogic.ConfirmTask(request);
+
+            if (task)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+        [HttpPost("Reject")]
+        public IActionResult FinishTask(ConfirmTaskRequest request)
+        {
+            var task = _taskLogic.RefuseTask(request);
+            if (task)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
 
 
         [HttpDelete]

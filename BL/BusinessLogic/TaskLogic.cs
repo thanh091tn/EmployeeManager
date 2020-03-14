@@ -204,6 +204,10 @@ namespace BL.BusinessLogic
 
                 if (entity != null)
                 {
+                    if (entity.Status == 5)
+                    {
+                        entity.Status = 1;
+                    }
                     entity.EndTime = request.EndTime;
                     entity.StartTime = request.StartTime;
                     entity.Name = request.Name;
@@ -303,5 +307,62 @@ namespace BL.BusinessLogic
             }
             return true;
         }
+
+        public bool ConfirmTask(ConfirmTaskRequest request)
+        {
+            try
+            {
+                var entity = _uow.GetRepository<TaskEntity>().GetAll().FirstOrDefault(c => c.Id == request.Id);
+                if (entity != null)
+                {
+                    entity.IsConfirm = true;
+                    entity.NoteTime = DateTime.Now;
+                    entity.Updateby = _userHelper.GetUserId();
+                    entity.Status = 4;
+                    entity.Note = request.Note;
+                    entity.Mark = request.Mark;
+                    _uow.GetRepository<TaskEntity>().Update(entity);
+                    _uow.SaveChange();
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+
+            return false;
+        }
+
+        public bool RefuseTask(ConfirmTaskRequest request)
+        {
+            try
+            {
+                var entity = _uow.GetRepository<TaskEntity>().GetAll().FirstOrDefault(c => c.Id == request.Id);
+                if (entity != null)
+                {
+                    entity.IsConfirm = false;
+                    entity.IsAccepted = false;
+                    entity.IsApproved = false;
+                    entity.Reason = request.Note;
+                    entity.UpdateTime = DateTime.Now;
+                    entity.NoteTime = DateTime.Now;
+                    entity.Updateby = _userHelper.GetUserId();
+                    entity.Status = 5;
+                    _uow.GetRepository<TaskEntity>().Update(entity);
+                    _uow.SaveChange();
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+
+            return false;
+        }
+
     }
 }

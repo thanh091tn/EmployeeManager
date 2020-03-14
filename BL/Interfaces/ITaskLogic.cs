@@ -18,5 +18,7 @@ namespace BL.Interfaces
         bool FinishTask(Guid taskId, bool isdone);
         List<TaskDetailDto> GetListTaskManager();
         List<TaskDetailDto> GetListTaskAdmin();
+        bool ConfirmTask(ConfirmTaskRequest request);
+        bool RefuseTask(ConfirmTaskRequest request);
     }
 }
